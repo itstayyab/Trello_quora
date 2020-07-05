@@ -1,7 +1,7 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.UserDetailsResponse;
-import com.upgrad.quora.service.business.UserProfileService;
+import com.upgrad.quora.service.business.UserAuthorizationService;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
@@ -17,17 +17,22 @@ import org.springframework.web.bind.annotation.*;
 public class CommonController {
 
     @Autowired
-    private UserProfileService userProfileService;
+    private UserAuthorizationService userAuthorizationService;
 
+    /*Controller method that serves userProfile GET endpoint
+      Accepts access-token of logged-in user, userId for user profile to be retrieved
+      Returns UserDetailsResponse object after authorizing logged-in user and fetching the user details based on userId
+     */
     @RequestMapping(method = RequestMethod.GET, path ="/userprofile/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUserProfile(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
-        //Call UserProfile service to check if user has signed-in or signed-out already
-        UserAuthEntity userAuthEntity = userProfileService.authorizeUser(authorization);
 
-        //get requested user details from DB after signed in user is authenticated
-        UserEntity existingUser = userProfileService.getUser(userUuid);
+        //Check if user has signed-in or signed-out already by validating the access-token
+        UserAuthEntity userAuthEntity = userAuthorizationService.authorizeUser(authorization);
 
-        //creating new UserDetails object to send user details in response
+        //Get requested user's details after signed in user is authorized
+        UserEntity existingUser = userAuthorizationService.getUserByUuid(userUuid);
+
+        //Creating new UserDetailsResponse object to send user profile details in response
         UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
         userDetailsResponse.firstName(existingUser.getFirstName())
                 .lastName(existingUser.getLastName())
@@ -38,7 +43,5 @@ public class CommonController {
                 .dob(existingUser.getDob())
                 .contactNumber(existingUser.getContactNumber());
         return new ResponseEntity<UserDetailsResponse>(userDetailsResponse, HttpStatus.OK);
-
     }
-
 }
