@@ -19,7 +19,11 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllQuestions",
-                query = "select q from QuestionEntity q")
+                query = "select q from QuestionEntity q"),
+        @NamedQuery(
+                name="getQuestionByUuid",
+                query = "select q from QuestionEntity q where q.uuid=:questionId"
+        )
 })
 public class QuestionEntity implements Serializable {
 
