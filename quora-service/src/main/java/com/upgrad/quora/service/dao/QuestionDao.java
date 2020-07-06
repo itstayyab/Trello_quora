@@ -4,6 +4,7 @@ import com.upgrad.quora.service.entity.QuestionEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.sql.SQLException;
@@ -28,4 +29,21 @@ public class QuestionDao {
         return questionsList;
     }
 
+    //Fetch Question by question Uuid
+    public QuestionEntity getQuestionByUuid(String questionUuid) {
+        try{
+            return entityManager.createNamedQuery("getQuestionByUuid", QuestionEntity.class)
+                    .setParameter("questionId", questionUuid)
+                    .getSingleResult();
+        } catch(NoResultException nre) {
+            nre.printStackTrace();
+            return null;
+        }
+    }
+
+    //persist the edited Question in Database
+    public QuestionEntity editQuestion(QuestionEntity questionEntity) {
+        entityManager.persist(questionEntity);
+        return questionEntity;
+    }
 }
