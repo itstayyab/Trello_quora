@@ -114,6 +114,15 @@ public class QuestionService {
             }
         }
     }
+
+    /**
+     * Service method to get all question posted by an user.
+     * @param userId
+     * @param accessToken
+     * @return list of all questions
+     * @throws AuthorizationFailedException
+     * @throws UserNotFoundException
+     */
     public List<QuestionEntity> getAllQuestionsByUser(final String userId, final String accessToken)
             throws AuthorizationFailedException, UserNotFoundException {
         UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(accessToken);

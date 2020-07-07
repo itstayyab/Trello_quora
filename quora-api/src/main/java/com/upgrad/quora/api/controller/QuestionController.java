@@ -117,7 +117,7 @@ public class QuestionController {
      * Controller method to get all question posted by an user.
      * @param accessToken
      * @param userId
-     * @return
+     * @return list of all question posted a user.
      * @throws AuthorizationFailedException
      * @throws UserNotFoundException
      */
