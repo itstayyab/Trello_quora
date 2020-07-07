@@ -35,7 +35,7 @@ public class UserAuthorizationService {
 
     /*Authorize the user who is trying to fetch a user's profile details
       Parameters passed to method: access_token of logged-in user
-      Returns entity of type UserAuthEntity if logged-in is authorized; else throws AuthorizationFailedException*/
+      Returns entity of type UserAuthEntity if logged-in user is authorized; else throws AuthorizationFailedException*/
     public UserAuthEntity authorizeUser(final String authorization) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(authorization);
         if (userAuthEntity==null) {

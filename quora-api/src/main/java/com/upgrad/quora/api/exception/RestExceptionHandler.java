@@ -1,6 +1,7 @@
 package com.upgrad.quora.api.exception;
 
 import com.upgrad.quora.api.model.ErrorResponse;
+import com.upgrad.quora.api.model.QuestionEditResponse;
 import com.upgrad.quora.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,4 +51,13 @@ public class RestExceptionHandler {
         new ErrorResponse().code(exception.getCode()).message(exception.getErrorMessage()),
         HttpStatus.UNAUTHORIZED);
   }
+
+  @ExceptionHandler(InvalidQuestionException.class)
+  public ResponseEntity<ErrorResponse> invalidQuestionResponse(
+          InvalidQuestionException exception, WebRequest request) {
+    return new ResponseEntity<ErrorResponse>(
+            new ErrorResponse().code(exception.getCode()).message(exception.getErrorMessage()),
+            HttpStatus.NOT_FOUND);
+  }
+
 }
