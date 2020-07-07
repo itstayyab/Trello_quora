@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "question")
@@ -22,8 +21,10 @@ import java.util.Date;
                 query = "select q from QuestionEntity q"),
         @NamedQuery(
                 name="getQuestionByUuid",
-                query = "select q from QuestionEntity q where q.uuid=:questionId"
-        )
+                query = "select q from QuestionEntity q where q.uuid=:questionId"),
+        @NamedQuery(
+                name = "getAllQuestionsByUser",
+                query = "select q from QuestionEntity q where q.userEntity=:user")
 })
 public class QuestionEntity implements Serializable {
 

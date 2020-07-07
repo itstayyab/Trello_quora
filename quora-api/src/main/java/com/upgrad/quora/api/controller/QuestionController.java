@@ -7,6 +7,7 @@ import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
+import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -110,5 +111,27 @@ public class QuestionController {
         QuestionEditResponse questionEditResponse = new QuestionEditResponse().id(editedQuestion.getUuid()).status("QUESTION EDITED");
 
         return new ResponseEntity<QuestionEditResponse>(questionEditResponse,HttpStatus.OK);
+    }
+
+    /**
+     * Controller method to get all question posted by an user.
+     * @param accessToken
+     * @param userId
+     * @return
+     * @throws AuthorizationFailedException
+     * @throws UserNotFoundException
+     */
+    @RequestMapping(method = RequestMethod.GET,path = "question/all/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<QuestionDetailsResponse>> getQuestionByUserId(@RequestHeader("authorization") final String accessToken,@PathVariable("userId") String userId)
+            throws AuthorizationFailedException, UserNotFoundException {
+        List<QuestionEntity> questions = questionService.getAllQuestionsByUser(userId, accessToken);
+        List<QuestionDetailsResponse> questionDetailResponses = new ArrayList<>();
+        for (QuestionEntity questionEntity : questions) {
+            QuestionDetailsResponse questionDetailResponse = new QuestionDetailsResponse();
+            questionDetailResponse.setId(questionEntity.getUuid());
+            questionDetailResponse.setContent(questionEntity.getContent());
+            questionDetailResponses.add(questionDetailResponse);
+        }
+        return new ResponseEntity<List<QuestionDetailsResponse>>(questionDetailResponses, HttpStatus.OK);
     }
 }

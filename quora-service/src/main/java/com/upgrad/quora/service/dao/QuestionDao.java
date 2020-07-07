@@ -1,13 +1,12 @@
 package com.upgrad.quora.service.dao;
 
 import com.upgrad.quora.service.entity.QuestionEntity;
+import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -45,5 +44,17 @@ public class QuestionDao {
     public QuestionEntity editQuestion(QuestionEntity questionEntity) {
         entityManager.persist(questionEntity);
         return questionEntity;
+    }
+
+    /**
+     * To get all questions from question entity for a given user
+     * @param userId
+     * @return
+     */
+    public List<QuestionEntity> getAllQuestionsByUser(final UserEntity userId) {
+        return entityManager
+                .createNamedQuery("getAllQuestionsByUser", QuestionEntity.class)
+                .setParameter("user", userId)
+                .getResultList();
     }
 }
