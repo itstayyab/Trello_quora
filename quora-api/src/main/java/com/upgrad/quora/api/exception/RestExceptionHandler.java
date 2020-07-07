@@ -57,7 +57,7 @@ public class RestExceptionHandler {
           InvalidQuestionException exception, WebRequest request) {
     return new ResponseEntity<ErrorResponse>(
             new ErrorResponse().code(exception.getCode()).message(exception.getErrorMessage()),
-            HttpStatus.FORBIDDEN);
+            HttpStatus.NOT_FOUND);
   }
 
 }
