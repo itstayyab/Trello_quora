@@ -100,7 +100,8 @@ public class UserAuthEntity {
     this.loginAt = loginAt;
   }
 
-  public ZonedDateTime getLogoutAt() {
+  public  ZonedDateTime getLogoutAt() {
+
     return logoutAt;
   }
 

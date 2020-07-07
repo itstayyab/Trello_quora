@@ -172,6 +172,7 @@ public class UserEntity implements Serializable {
   }
 
   public String getRole() {
+
     return role;
   }
 

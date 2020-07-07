@@ -33,7 +33,7 @@ public class AdminService {
 
     if (!userAuthEntity.getUserEntity().getRole().equals("admin")) {
       throw new AuthorizationFailedException(
-          "ATHR-003", "Unauthorized Access, Entered user is not an admin");
+              "ATHR-003", "Unauthorized Access, Entered user is not an admin");
     }
 
     UserEntity existingUser = this.userDao.getUserById(userId);
