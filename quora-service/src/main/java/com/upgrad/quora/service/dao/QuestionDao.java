@@ -57,4 +57,8 @@ public class QuestionDao {
                 .setParameter("user", userId)
                 .getResultList();
     }
+    public void deleteQuestion(QuestionEntity questionEntity) {
+
+        entityManager.remove(questionEntity);
+    }
 }
