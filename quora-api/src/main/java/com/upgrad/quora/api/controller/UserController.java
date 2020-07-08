@@ -63,6 +63,14 @@ public class UserController {
                         .status("USER SUCCESSFULLY REGISTERED");
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
     }
+
+    /**
+     * This method is for a user to singin.
+     *
+     * @param authorization for the basic authentication
+     * @return Signin resopnse which has userId and access-token in response header.
+     * @throws AuthenticationFailedException : if username or password is invalid
+     */
     @RequestMapping(
             method = RequestMethod.POST,
             path = "/user/signin",
