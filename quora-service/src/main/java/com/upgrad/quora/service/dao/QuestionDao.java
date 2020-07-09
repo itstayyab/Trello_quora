@@ -57,6 +57,11 @@ public class QuestionDao {
                 .setParameter("user", userId)
                 .getResultList();
     }
+
+    /**
+     * Delete answers in the DB
+     * @param questionEntity : require answer body
+     * */
     public void deleteQuestion(QuestionEntity questionEntity) {
 
         entityManager.remove(questionEntity);

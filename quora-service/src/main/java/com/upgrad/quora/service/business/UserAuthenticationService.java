@@ -23,7 +23,11 @@ public class UserAuthenticationService {
   @Autowired private UserAuthDao userAuthDao;
 
   @Autowired private PasswordCryptographyProvider passwordCryptographyProvider;
-
+  /**
+   * check if user is already created
+   * add salt and encryption to password
+   * @throws SignUpRestrictedException : throw exception if user already exists
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   public UserEntity signup(UserEntity userEntity) throws SignUpRestrictedException {
     if (isUserNameInUse(userEntity.getUserName())) {
@@ -43,7 +47,14 @@ public class UserAuthenticationService {
     userEntity.setPassword(encryptedText[1]);
     return userDao.createUser(userEntity);
   }
-
+  /**
+   * the signin user method
+   *
+   * @param username : Username that you want to signin
+   * @param password : Password of user
+   * @throws AuthenticationFailedException : If user not found or invalid password
+   * @return UserAuthEntity access-token and singin response.
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   public UserAuthEntity signin(final String username, final String password)
       throws AuthenticationFailedException {
@@ -75,6 +86,12 @@ public class UserAuthenticationService {
     return userAuthEntity;
   }
 
+  /**
+   * The signout method
+   * @param accessToken : required to signout the user
+   * @throws SignOutRestrictedException : if the access-token is not found in the DB.
+   * @return UserEntity : that user is signed out.
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   public UserEntity signout(final String accessToken) throws SignOutRestrictedException {
     UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(accessToken);
