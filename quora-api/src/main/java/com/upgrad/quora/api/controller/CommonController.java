@@ -1,7 +1,7 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.UserDetailsResponse;
-import com.upgrad.quora.service.business.UserAuthorizationService;
+import com.upgrad.quora.service.business.CommonService;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
@@ -17,20 +17,24 @@ import org.springframework.web.bind.annotation.*;
 public class CommonController {
 
     @Autowired
-    private UserAuthorizationService userAuthorizationService;
+    private CommonService commonService;
 
-    /*Controller method that serves userProfile GET endpoint
-      Accepts access-token of logged-in user, userId for user profile to be retrieved
-      Returns UserDetailsResponse object after authorizing logged-in user and fetching the user details based on userId
+    /**
+     * Controller method that serves userProfile GET endpoint
+     * @param userUuid
+     * @param authorization
+     * @return User profile of a user
+     * @throws AuthorizationFailedException
+     * @throws UserNotFoundException
      */
     @RequestMapping(method = RequestMethod.GET, path ="/userprofile/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUserProfile(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
 
         //Check if user has signed-in or signed-out already by validating the access-token
-        UserAuthEntity userAuthEntity = userAuthorizationService.authorizeUser(authorization);
+        UserAuthEntity userAuthEntity = commonService.authorizeUser(authorization);
 
         //Get requested user's details after signed in user is authorized
-        UserEntity existingUser = userAuthorizationService.getUserByUuid(userUuid);
+        UserEntity existingUser = commonService.getUserByUuid(userUuid);
 
         //Creating new UserDetailsResponse object to send user profile details in response
         UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
