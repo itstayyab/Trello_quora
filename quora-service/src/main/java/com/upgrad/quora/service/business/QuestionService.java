@@ -30,8 +30,15 @@ public class QuestionService {
     @Autowired
     private UserDao userDao;
 
-    //Authorize user who wants to post a question
-    public UserAuthEntity createQuestionAuthorization(final String authorization) throws AuthorizationFailedException {
+    /**
+     * Business logic to authorize user who wants to create question and create a question
+     * @param authorization
+     * @param questionEntity
+     * @return QuestionEntity
+     * @throws AuthorizationFailedException
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public QuestionEntity createQuestion(String authorization, QuestionEntity questionEntity) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(authorization);
         if (userAuthEntity==null) {
             throw new AuthorizationFailedException("ATHR-001","User has not signed in");
@@ -41,21 +48,21 @@ public class QuestionService {
             if (logoutAt!=null) {
                 throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to post a question");
             } else {
-                return userAuthEntity;
+                // Assign a UUID to the question that is being created.
+                questionEntity.setUuid(UUID.randomUUID().toString());
+                questionEntity.setUserEntity(userAuthEntity.getUserEntity());
+                return questionDao.createQuestion(questionEntity);
             }
         }
     }
 
-    //Create a new Question entity
-    @Transactional(propagation = Propagation.REQUIRED)
-    public QuestionEntity createNewQuestion(QuestionEntity questionEntity) {
-        // Assign a UUID to the question that is being created.
-        questionEntity.setUuid(UUID.randomUUID().toString());
-        return questionDao.createQuestion(questionEntity);
-    }
-
-    //Authorize user who wants to get a list of all questions
-    public UserAuthEntity getAllQuestionsAuthorization(final String authorization) throws AuthorizationFailedException {
+    /**
+     * Business logic to authorize user who wants to get a list of all questions and return list of questions
+     * @param authorization
+     * @return list of all questions
+     * @throws AuthorizationFailedException
+     */
+    public List<QuestionEntity> getAllQuestions(final String authorization) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(authorization);
         if (userAuthEntity==null) {
             throw new AuthorizationFailedException("ATHR-001","User has not signed in");
@@ -65,42 +72,21 @@ public class QuestionService {
             if (logoutAt!=null) {
                 throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to get all questions");
             } else {
-                return userAuthEntity;
+                return questionDao.getAllQuestions();
             }
         }
     }
 
-    //Get a list of all Question entities
-    public List<QuestionEntity> getAllQuestions() {
-        return questionDao.getAllQuestions();
-    }
-
-    //Get Question entity by question Uuid
-    public QuestionEntity getQuestionByUuid(String questionUuid) throws InvalidQuestionException {
-        QuestionEntity questionByUuid = questionDao.getQuestionByUuid(questionUuid);
-        if (questionByUuid==null) {
-           throw new InvalidQuestionException("QUES-001","Entered question uuid does not exist");
-        }
-        return questionByUuid;
-    }
-
-    //Validate whether the question owner and editor are same users
-    public boolean authorizeQuestionOwner(Integer questionEditorId, Integer questionOwnerId) throws AuthorizationFailedException {
-        if (!questionEditorId.equals(questionOwnerId)) {
-            throw new AuthorizationFailedException("ATHR-003","Only the question owner can edit the question");
-        } else {
-            return true;
-        }
-    }
-
-    //Edit question content
+    /**
+     * Business logic to check whether user is authorized to edit question and edit the question
+     * @param authorization
+     * @param questionUuid
+     * @return edited question
+     * @throws AuthorizationFailedException
+     * @throws InvalidQuestionException
+     */
     @Transactional(propagation = Propagation.REQUIRED)
-    public QuestionEntity editQuestion(QuestionEntity questionEntity) {
-        return questionDao.editQuestion(questionEntity);
-    }
-
-    //Check whether user is authorized to edit question
-    public UserAuthEntity editQuestionAuthorization(final String authorization) throws AuthorizationFailedException {
+    public QuestionEntity editQuestionContent(final String authorization, String questionUuid, String content) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(authorization);
         if (userAuthEntity==null) {
             throw new AuthorizationFailedException("ATHR-001","User has not signed in");
@@ -110,7 +96,21 @@ public class QuestionService {
             if (logoutAt!=null) {
                 throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to edit the question");
             } else {
-                return userAuthEntity;
+                //Get question by questionUuid passed by user
+                QuestionEntity questionByUuid = questionDao.getQuestionByUuid(questionUuid);
+                if (questionByUuid==null) {
+                    throw new InvalidQuestionException("QUES-001","Entered question uuid does not exist");
+                } else {
+                    //Compare the userId to check if the user trying to edit question is the owner of the question
+                    Integer questionEditorId = userAuthEntity.getUserEntity().getId();
+                    Integer questionOwnerId = questionByUuid.getUserEntity().getId();
+                    if (!questionEditorId.equals(questionOwnerId)) {
+                        throw new AuthorizationFailedException("ATHR-003","Only the question owner can edit the question");
+                    } else {
+                        questionByUuid.setContent(content);
+                        return questionDao.editQuestion(questionByUuid);
+                    }
+                }
             }
         }
     }
