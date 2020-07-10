@@ -17,7 +17,13 @@ public class AdminService {
   @Autowired private UserAuthDao userAuthDao;
 
   @Autowired private UserDao userDao;
-
+  /**
+   * Delete user endpoint
+   * @param userId : userId of which you want to delete
+   * @param accessToken : access-token for authorization
+   * @throws AuthorizationFailedException : If token is invalid you get authorization failed response
+   * @throws UserNotFoundException : If userid is invalid or not found
+   * */
   @Transactional(propagation = Propagation.REQUIRED)
   public UserEntity deleteUser(final String userId, final String accessToken)
       throws AuthorizationFailedException, UserNotFoundException {
