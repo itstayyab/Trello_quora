@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.ZonedDateTime;
 
 @Service
-public class UserAuthorizationService {
+public class CommonService {
 
     @Autowired
     private UserDao userDao;
@@ -20,12 +20,15 @@ public class UserAuthorizationService {
     @Autowired
     private UserAuthDao userAuthDao;
 
-    /*Retrieving the UserEntity based on userId
-      Parameters passed to method: Uuid of user
-      Returns entity of type UserEntity if user with uuid is found;else throws UserNotFoundException*/
+    /**
+     * Retrieving the UserEntity based on userId
+     * @param userUuid
+     * @return UserEntity
+     * @throws UserNotFoundException
+     */
     public UserEntity getUserByUuid(final String userUuid) throws UserNotFoundException{
         UserEntity userEntity =  userDao.getUserById(userUuid);
-        if(userEntity==null) {
+        if (userEntity==null) {
             //handle exception when null object is returned from userDao
             throw new UserNotFoundException("USR-001","User with entered uuid does not exist");
         } else {
@@ -33,9 +36,12 @@ public class UserAuthorizationService {
         }
     }
 
-    /*Authorize the user who is trying to fetch a user's profile details
-      Parameters passed to method: access_token of logged-in user
-      Returns entity of type UserAuthEntity if logged-in user is authorized; else throws AuthorizationFailedException*/
+    /**
+     * Authorize the user who is trying to fetch a user's profile details
+     * @param authorization
+     * @return UserAuthEntity
+     * @throws AuthorizationFailedException
+     */
     public UserAuthEntity authorizeUser(final String authorization) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = userAuthDao.getUserAuthByToken(authorization);
         if (userAuthEntity==null) {
