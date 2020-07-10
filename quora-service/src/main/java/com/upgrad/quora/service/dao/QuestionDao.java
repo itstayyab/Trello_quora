@@ -35,7 +35,6 @@ public class QuestionDao {
                     .setParameter("questionId", questionUuid)
                     .getSingleResult();
         } catch(NoResultException nre) {
-            nre.printStackTrace();
             return null;
         }
     }
