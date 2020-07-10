@@ -15,31 +15,50 @@ public class QuestionDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    //Persists a new Question entity in the Database
+    /**
+     * Persists a new Question entity in the Database
+     *
+     * @param questionEntity
+     * @return QuestionEntity created
+     */
     public QuestionEntity createQuestion(QuestionEntity questionEntity) {
         entityManager.persist(questionEntity);
         return questionEntity;
     }
 
-    //Fetches a list of Question entities from the Database
+    /**
+     * Fetches a list of Question entities from the Database
+     *
+     * @return List of all questions
+     */
     public List<QuestionEntity> getAllQuestions() {
 
         List<QuestionEntity> questionsList = entityManager.createNamedQuery("getAllQuestions", QuestionEntity.class).getResultList();
         return questionsList;
     }
 
-    //Fetch Question by question Uuid
+    /**
+     * Fetch Question by question Uuid
+     *
+     * @param questionUuid
+     * @return question by Uuid
+     */
     public QuestionEntity getQuestionByUuid(String questionUuid) {
-        try{
+        try {
             return entityManager.createNamedQuery("getQuestionByUuid", QuestionEntity.class)
                     .setParameter("questionId", questionUuid)
                     .getSingleResult();
-        } catch(NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
 
-    //persist the edited Question in Database
+    /**
+     * persist the edited Question in Database
+     *
+     * @param questionEntity
+     * @return
+     */
     public QuestionEntity editQuestion(QuestionEntity questionEntity) {
         entityManager.persist(questionEntity);
         return questionEntity;
@@ -47,6 +66,7 @@ public class QuestionDao {
 
     /**
      * to all questions posted by a user
+     *
      * @param userId
      * @return list of questions
      */
@@ -56,6 +76,12 @@ public class QuestionDao {
                 .setParameter("user", userId)
                 .getResultList();
     }
+
+    /**
+     * delete a question from Database
+     *
+     * @param questionEntity
+     */
     public void deleteQuestion(QuestionEntity questionEntity) {
 
         entityManager.remove(questionEntity);
