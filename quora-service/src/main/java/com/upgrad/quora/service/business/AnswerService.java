@@ -28,13 +28,14 @@ public class AnswerService {
   @Autowired private QuestionDao questionDao;
   /**
    * Add answer into the database
+   *
    * @param questionId : questionid that you want to answer
    * @param answerEntity : the answer body
    * @param accessToken : access-token for authentication
    * @throws AuthorizationFailedException : if authentication is failed
    * @throws InvalidQuestionException : if question id is invalid
    * @return returns created response for the answer
-   * */
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   public AnswerEntity createAnswer(
       AnswerEntity answerEntity, final String accessToken, final String questionId)
@@ -58,13 +59,14 @@ public class AnswerService {
   }
   /**
    * Update answer into the database
+   *
    * @param answerId : questionid that you want to answer
    * @param newAnswer : the answer body
    * @param accessToken : access-token for authentication
    * @throws AuthorizationFailedException : if authentication is failed
    * @throws AnswerNotFoundException : if answer id is invalid
    * @return returns updated response for the answer
-   * */
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   public AnswerEntity editAnswer(
       final String accessToken, final String answerId, final String newAnswer)
@@ -90,12 +92,13 @@ public class AnswerService {
   }
   /**
    * Delete answer from the database
+   *
    * @param answerId : answerId of the answer that you want to delete
    * @param accessToken : access-token for authentication
    * @throws AuthorizationFailedException : if authentication is failed
    * @throws AnswerNotFoundException : if answer id is invalid
    * @return returns deleted response for the answer
-   * */
+   */
   @Transactional(propagation = Propagation.REQUIRED)
   public AnswerEntity deleteAnswer(final String answerId, final String accessToken)
       throws AuthorizationFailedException, AnswerNotFoundException {
@@ -114,9 +117,9 @@ public class AnswerService {
     }
     if (userAuthEntity.getUserEntity().getRole().equals("admin")
         || answerEntity
-        .getUserEntity()
-        .getUuid()
-        .equals(userAuthEntity.getUserEntity().getUuid())) {
+            .getUserEntity()
+            .getUuid()
+            .equals(userAuthEntity.getUserEntity().getUuid())) {
       return answerDao.deleteAnswer(answerId);
     } else {
       throw new AuthorizationFailedException(
@@ -126,12 +129,13 @@ public class AnswerService {
 
   /**
    * Get all answer from the database
+   *
    * @param questionId : questionid of which you want to see all answers
    * @param accessToken : access-token for authentication
    * @throws AuthorizationFailedException : if authentication is failed
    * @throws InvalidQuestionException : if question id is invalid
-   * @return returns all the  answers to that question
-   * */
+   * @return returns all the answers to that question
+   */
   public List<AnswerEntity> getAllAnswersToQuestion(
       final String questionId, final String accessToken)
       throws AuthorizationFailedException, InvalidQuestionException {

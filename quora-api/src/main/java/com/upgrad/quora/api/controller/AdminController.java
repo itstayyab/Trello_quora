@@ -19,12 +19,13 @@ public class AdminController {
 
   /**
    * Get the user detail by user id.
+   *
    * @param userId : user id of the user
    * @param accessToken : access-token to authenticate the user
    * @throws AuthorizationFailedException : user authentication exception
    * @throws UserNotFoundException : will through a user not found exception
    * @return UserDeleteResponse
-   **/
+   */
   @RequestMapping(
       method = RequestMethod.DELETE,
       path = "/admin/user/{userId}",
