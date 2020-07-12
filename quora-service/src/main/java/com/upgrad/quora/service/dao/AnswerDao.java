@@ -14,8 +14,9 @@ public class AnswerDao {
   @PersistenceContext private EntityManager entityManager;
   /**
    * Create answers in the DB
+   *
    * @param answerEntity : require answer body
-   * */
+   */
   public AnswerEntity createAnswer(AnswerEntity answerEntity) {
     entityManager.persist(answerEntity);
     return answerEntity;
@@ -23,8 +24,9 @@ public class AnswerDao {
 
   /**
    * get answers from the DB
+   *
    * @param answerId : require answerid
-   * */
+   */
   public AnswerEntity getAnswerById(final String answerId) {
     try {
       return entityManager
@@ -38,16 +40,18 @@ public class AnswerDao {
 
   /**
    * Update answers in the DB
+   *
    * @param answerEntity : require answer body
-   * */
+   */
   public void updateAnswer(AnswerEntity answerEntity) {
     entityManager.merge(answerEntity);
   }
 
   /**
    * delete answers from the DB
+   *
    * @param answerId : require answerId
-   * */
+   */
   public AnswerEntity deleteAnswer(final String answerId) {
     AnswerEntity deleteAnswer = getAnswerById(answerId);
     if (deleteAnswer != null) {

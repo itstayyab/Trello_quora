@@ -16,7 +16,7 @@ public class UserAuthDao {
    *
    * @param accessToken : access token to authenticate
    * @return single user auth details
-   * */
+   */
   public UserAuthEntity getUserAuthByToken(final String accessToken) {
     try {
       return entityManager
@@ -31,7 +31,7 @@ public class UserAuthDao {
    * Persists user authen entity in database.
    *
    * @param userAuthEntity to be persisted in the DB.
-   * @return  UserAuthEntity
+   * @return UserAuthEntity
    */
   public UserAuthEntity createAuthToken(final UserAuthEntity userAuthEntity) {
     entityManager.persist(userAuthEntity);

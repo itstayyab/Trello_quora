@@ -24,8 +24,8 @@ public class UserAuthenticationService {
 
   @Autowired private PasswordCryptographyProvider passwordCryptographyProvider;
   /**
-   * check if user is already created
-   * add salt and encryption to password
+   * check if user is already created add salt and encryption to password
+   *
    * @throws SignUpRestrictedException : throw exception if user already exists
    */
   @Transactional(propagation = Propagation.REQUIRED)
@@ -88,6 +88,7 @@ public class UserAuthenticationService {
 
   /**
    * The signout method
+   *
    * @param accessToken : required to signout the user
    * @throws SignOutRestrictedException : if the access-token is not found in the DB.
    * @return UserEntity : that user is signed out.

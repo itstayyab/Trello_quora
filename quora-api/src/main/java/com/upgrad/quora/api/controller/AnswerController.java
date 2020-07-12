@@ -22,13 +22,14 @@ public class AnswerController {
   @Autowired private AnswerService answerService;
   /**
    * This endpoint create answer to a question
+   *
    * @param questionId : Question ID that you want to answer
    * @param accessToken : access-token to authenticate
    * @param answerRequest : The answer body
    * @throws AuthorizationFailedException : Returns authorization failed exception
    * @throws InvalidQuestionException : If question id is invalid returns invalid question response
    * @return answer creation resopnse
-   * */
+   */
   @RequestMapping(
       method = RequestMethod.POST,
       path = "/question/{questionId}/answer/create",
@@ -48,13 +49,14 @@ public class AnswerController {
   }
 
   /**
-   * This endpoint create answer to a question
+   * This endpoint update the answer
+   *
    * @param answerId : Answer ID that you want to Update
    * @param accessToken : access-token to authenticate
    * @throws AuthorizationFailedException : Returns authorization failed exception
    * @throws AnswerNotFoundException : If answer id is invalid returns invalid answer response
    * @return answer Updated response
-   * */
+   */
   @RequestMapping(
       method = RequestMethod.PUT,
       path = "/answer/edit/{answerId}",
@@ -72,13 +74,14 @@ public class AnswerController {
     return new ResponseEntity<AnswerEditResponse>(answerEditResponse, HttpStatus.OK);
   }
   /**
-   * This endpoint create answer to a question
+   * This endpoint delete answer
+   *
    * @param answerId : Answer ID that you want to Delete
    * @param accessToken : access-token to authenticate
    * @throws AuthorizationFailedException : Returns authorization failed exception
    * @throws AnswerNotFoundException : If answer id is invalid returns invalid answer id response
    * @return answer deleted response
-   * */
+   */
   @RequestMapping(
       method = RequestMethod.DELETE,
       path = "/answer/delete/{answerId}",
@@ -93,13 +96,15 @@ public class AnswerController {
     return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse, HttpStatus.OK);
   }
   /**
-   * This endpoint create answer to a question
+   * This endpoint get all the answer to a question
+   *
    * @param questionId : Answer ID that you want to Delete
    * @param accessToken : access-token to authenticate
    * @throws AuthorizationFailedException : Returns authorization failed exception
-   * @throws InvalidQuestionException : If Question id is invalid returns invalid Question id response
+   * @throws InvalidQuestionException : If Question id is invalid returns invalid Question id
+   *     response
    * @return All the answer to the Question
-   * */
+   */
   @RequestMapping(
       method = RequestMethod.GET,
       path = "/answer/all/{questionId}",

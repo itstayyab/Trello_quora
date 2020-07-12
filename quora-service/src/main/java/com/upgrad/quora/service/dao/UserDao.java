@@ -40,6 +40,7 @@ public class UserDao {
 
   /**
    * Method to get user by name
+   *
    * @param userName : username for which to be pulled
    * @return user details
    */
@@ -55,6 +56,7 @@ public class UserDao {
   }
   /**
    * Method to get user by email
+   *
    * @param email : email for which to be pulled
    * @return user details
    */
@@ -71,6 +73,7 @@ public class UserDao {
 
   /**
    * Method to update user in db
+   *
    * @param updatedUserEntity : UserEntity body
    * @return updated response
    */
@@ -80,6 +83,7 @@ public class UserDao {
 
   /**
    * Method to delete user by id
+   *
    * @param userId : username which you want to delete
    * @return deleted response
    */
